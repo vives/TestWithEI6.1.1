@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~  WSO2 Inc. licenses this file to you under the Apache License,
+ ~  Version 2.0 (the "License"); you may not use this file except
+ ~  in compliance with the License.
+ ~  You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~  Unless required by applicable law or agreed to in writing,
+ ~  software distributed under the License is distributed on an
+ ~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~  KIND, either express or implied.  See the License for the
+ ~  specific language governing permissions and limitations
+ ~  under the License.
+-->
+<proxy xmlns="http://ws.apache.org/ns/synapse" name="activecollab" transports="https,http" statistics="disable"
+       trace="disable" startOnLoad="true">
+    <target>
+        <inSequence>
+            <property name="apiVersion" expression="json-eval($.apiVersion)"/>
+            <property name="email" expression="json-eval($.email)"/>
+            <property name="password" expression="json-eval($.password)"/>
+            <property name="clientVendor" expression="json-eval($.clientVendor)"/>
+            <property name="clientName" expression="json-eval($.clientName)"/>
+            <property name="projectId" expression="json-eval($.projectId)"/>
+            <property name="name" expression="json-eval($.name)"/>
+            <property name="companyId" expression="json-eval($.companyId)"/>
+            <property name="name" expression="json-eval($.name)"/>
+            <property name="leaderId" expression="json-eval($.leaderId)"/>
+            <property name="categoryId" expression="json-eval($.categoryId)"/>
+            <property name="members" expression="json-eval($.members)"/>
+            <property name="currencyId" expression="json-eval($.currencyId)"/>
+            <property name="hourlyRate" expression="json-eval($.hourlyRate)"/>
+            <property name="jobTypeId" expression="json-eval($.jobTypeId)"/>
+            <property name="hourlyRates" expression="json-eval($.hourlyRates)"/>
+            <property name="number" expression="json-eval($.number)"/>
+            <property name="items" expression="json-eval($.items)"/>
+            <property name="companyId" expression="json-eval($.companyId)"/>
+            <property name="address" expression="json-eval($.address)"/>
+            <property name="note" expression="json-eval($.note)"/>
+            <property name="recipients" expression="json-eval($.recipients)"/>
+            <property name="invoiceId" expression="json-eval($.invoiceId)"/>
+            <property name="subject" expression="json-eval($.subject)"/>
+            <property name="message" expression="json-eval($.message)"/>
+            <property name="allowPayment" expression="json-eval($.allowPayment)"/>
+            <property name="type" expression="json-eval($.type)"/>
+            <property name="userEmail" expression="json-eval($.userEmail)"/>
+            <property name="userPassword" expression="json-eval($.userPassword)"/>
+            <property name="customPermissions" expression="json-eval($.customPermissions)"/>
+            <property name="userId" expression="json-eval($.userId)"/>
+            <property name="assigneeId" expression="json-eval($.assigneeId)"/>
+            <property name="taskId" expression="json-eval($.taskId)"/>
+            <property name="userId" expression="json-eval($.userId)"/>
+            <property name="isImportant" expression="json-eval($.isImportant)"/>
+            <property name="jobTypeId" expression="json-eval($.jobTypeId)"/>
+            <property name="estimate" expression="json-eval($.estimate)"/>
+            <property name="subTaskId" expression="json-eval($.subTaskId)"/>
+            <property name="blocking" expression="json-eval($.blocking)"/>
+            <property name="transportAction" expression="$trp:Action"/>
+            <activecollab.init>
+                <password>{$ctx:password}</password>
+                <email>{$ctx:email}</email>
+                <apiVersion>{$ctx:apiVersion}</apiVersion>
+                <clientVendor>{$ctx:clientVendor}</clientVendor>
+                <clientName>{$ctx:clientName}</clientName>
+                <blocking>{$ctx:blocking}</blocking>
+            </activecollab.init>
+            <switch source="get-property('transportAction')">
+                <case regex="urn:getProject">
+                    <activecollab.getProject>
+                        <projectId>{$ctx:projectId}</projectId>
+                    </activecollab.getProject>
+                </case>
+                <case regex="urn:getProject">
+                    <activecollab.getProject/>
+                </case>
+                <case regex="urn:completeProject">
+                    <activecollab.completeProject>
+                        <projectId>{$ctx:projectId}</projectId>
+                    </activecollab.completeProject>
+                </case>
+                <case regex="urn:createCategory">
+                    <activecollab.createCategory>
+                        <name>{$ctx:name}</name>
+                    </activecollab.createCategory>
+                </case>
+                <case regex="urn:createProject">
+                    <activecollab.createProject>
+                        <companyId>{$ctx:companyId}</companyId>
+                        <name>{$ctx:name}</name>
+                        <leaderId>{$ctx:leaderId}</leaderId>
+                        <categoryId>{$ctx:categoryId}</categoryId>
+                        <members>{$ctx:members}</members>
+                    </activecollab.createProject>
+                </case>
+                <case regex="urn:deleteCategory">
+                    <activecollab.deleteCategory>
+                        <categoryId>{$ctx:categoryId}</categoryId>
+                    </activecollab.deleteCategory>
+                </case>
+                <case regex="urn:getCurrency">
+                    <activecollab.getCurrency>
+                        <currencyId>{$ctx:currencyId}</currencyId>
+                    </activecollab.getCurrency>
+                </case>
+                <case regex="urn:listCompletedProjects">
+                    <activecollab.listCompletedProjects/>
+                </case>
+                <case regex="urn:listCurrencies">
+                    <activecollab.listCurrencies/>
+                </case>
+                <case regex="urn:listCategories">
+                    <activecollab.listCategories/>
+                </case>
+                <case regex="urn:listProjectNames">
+                    <activecollab.listProjectNames/>
+                </case>
+                <case regex="urn:listProjects">
+                    <activecollab.listProjects/>
+                </case>
+                <case regex="urn:renameCategory">
+                    <activecollab.renameCategory>
+                        <name>{$ctx:name}</name>
+                        <categoryId>{$ctx:categoryId}</categoryId>
+                    </activecollab.renameCategory>
+                </case>
+                <case regex="urn:renameProject">
+                    <activecollab.renameProject>
+                        <name>{$ctx:name}</name>
+                        <projectId>{$ctx:projectId}</projectId>
+                    </activecollab.renameProject>
+                </case>
+                <case regex="urn:createJobType">
+                    <activecollab.createJobType>
+                        <name>{$ctx:name}</name>
+                        <hourlyRate>{$ctx:hourlyRate}</hourlyRate>
+                    </activecollab.createJobType>
+                </case>
+                <case regex="urn:deleteJobType">
+                    <activecollab.deleteJobType>
+                        <jobTypeId>{$ctx:jobTypeId}</jobTypeId>
+                    </activecollab.deleteJobType>
+                </case>
+                <case regex="urn:getJobType">
+                    <activecollab.getJobType>
+                        <jobTypeId>{$ctx:jobTypeId}</jobTypeId>
+                    </activecollab.getJobType>
+                </case>
+                <case regex="urn:listJobTypes">
+                    <activecollab.listJobTypes/>
+                </case>
+                <case regex="urn:renameJobType">
+                    <activecollab.renameJobType>
+                        <name>{$ctx:name}</name>
+                        <hourlyRate>{$ctx:hourlyRate}</hourlyRate>
+                        <jobTypeId>{$ctx:jobTypeId}</jobTypeId>
+                    </activecollab.renameJobType>
+                </case>
+                <case regex="urn:createCompanyHourlyRate">
+                    <activecollab.createCompanyHourlyRate>
+                        <hourlyRates>{$ctx:hourlyRates}</hourlyRates>
+                        <companyId>{$ctx:companyId}</companyId>
+                    </activecollab.createCompanyHourlyRate>
+                </case>
+                <case regex="urn:getAllCompanies">
+                    <activecollab.getAllCompanies/>
+                </case>
+                <case regex="urn:getCompany">
+                    <activecollab.getCompany>
+                        <companyId>{$ctx:companyId}</companyId>
+                    </activecollab.getCompany>
+                </case>
+                <case regex="urn:listCompanies">
+                    <activecollab.listCompanies/>
+                </case>
+                <case regex="urn:moveToArchiveCompany">
+                    <activecollab.moveToArchiveCompany>
+                        <companyId>{$ctx:companyId}</companyId>
+                    </activecollab.moveToArchiveCompany>
+                </case>
+                <case regex="urn:moveToTrashCompany">
+                    <activecollab.moveToTrashCompany>
+                        <companyId>{$ctx:companyId}</companyId>
+                    </activecollab.moveToTrashCompany>
+                </case>
+                <case regex="urn:createCompany">
+                    <activecollab.createCompany>
+                        <name>{$ctx:name}</name>
+                    </activecollab.createCompany>
+                </case>
+                <case regex="urn:createInvoice">
+                    <activecollab.createInvoice>
+                        <number>{$ctx:number}</number>
+                        <companyId>{$ctx:companyId}</companyId>
+                        <items>{$ctx:items}</items>
+                        <address>{$ctx:address}</address>
+                        <note>{$ctx:note}</note>
+                    </activecollab.createInvoice>
+                </case>
+                <case regex="urn:deleteInvoice">
+                    <activecollab.deleteInvoice>
+                        <invoiceId>{$ctx:invoiceId}</invoiceId>
+                    </activecollab.deleteInvoice>
+                </case>
+                <case regex="urn:getInvoice">
+                    <activecollab.getInvoice>
+                        <invoiceId>{$ctx:invoiceId}</invoiceId>
+                    </activecollab.getInvoice>
+                </case>
+                <case regex="urn:listInvoices">
+                    <activecollab.listInvoices/>
+                </case>
+                <case regex="urn:sendInvoice">
+                    <activecollab.sendInvoice>
+                        <recipients>{$ctx:recipients}</recipients>
+                        <invoiceId>{$ctx:invoiceId}</invoiceId>
+                        <subject>{$ctx:subject}</subject>
+                        <message>{$ctx:message}</message>
+                        <allowPayment>{$ctx:allowPayment}</allowPayment>
+                    </activecollab.sendInvoice>
+                </case>
+                <case regex="urn:exportInvoice">
+                    <activecollab.exportInvoice>
+                        <invoiceId>{$ctx:invoiceId}</invoiceId>
+                    </activecollab.exportInvoice>
+                </case>
+                <case regex="urn:createUser">
+                    <activecollab.createUser>
+                        <type>{$ctx:type}</type>
+                        <userEmail>{$ctx:userEmail}</userEmail>
+                        <userPassword>{$ctx:userPassword}</userPassword>
+                        <companyId>{$ctx:companyId}</companyId>
+                        <customPermissions>{$ctx:customPermissions}</customPermissions>
+                    </activecollab.createUser>
+                </case>
+                <case regex="urn:deleteUser">
+                    <activecollab.deleteUser>
+                        <userId>{$ctx:userId}</userId>
+                    </activecollab.deleteUser>
+                </case>
+                <case regex="urn:getAllUsers">
+                    <activecollab.getAllUsers/>
+                </case>
+                <case regex="urn:getUser">
+                    <activecollab.getUser>
+                        <userId>{$ctx:userId}</userId>
+                    </activecollab.getUser>
+                </case>
+                <case regex="urn:listUsers">
+                    <activecollab.listUsers/>
+                </case>
+                <case regex="urn:reactivateUser">
+                    <activecollab.reactivateUser>
+                        <userId>{$ctx:userId}</userId>
+                    </activecollab.reactivateUser>
+                </case>
+                <case regex="urn:assignTask">
+                    <activecollab.assignTask>
+                        <projectId>{$ctx:projectId}</projectId>
+                        <assigneeId>{$ctx:assigneeId}</assigneeId>
+                        <taskId>{$ctx:taskId}</taskId>
+                    </activecollab.assignTask>
+                </case>
+                <case regex="urn:completeTask">
+                    <activecollab.completeTask>
+                        <taskId>{$ctx:taskId}</taskId>
+                    </activecollab.completeTask>
+                </case>
+                <case regex="urn:createSubTask">
+                    <activecollab.createSubTask>
+                        <projectId>{$ctx:projectId}</projectId>
+                        <taskId>{$ctx:taskId}</taskId>
+                        <name>{$ctx:name}</name>
+                        <assigneeId>{$ctx:assigneeId}</assigneeId>
+                    </activecollab.createSubTask>
+                </case>
+                <case regex="urn:createTask">
+                    <activecollab.createTask>
+                        <projectId>{$ctx:projectId}</projectId>
+                        <assigneeId>{$ctx:assigneeId}</assigneeId>
+                        <name>{$ctx:name}</name>
+                        <jobTypeId>{$ctx:jobTypeId}</jobTypeId>
+                        <isImportant>{$ctx:isImportant}</isImportant>
+                        <estimate>{$ctx:estimate}</estimate>
+                    </activecollab.createTask>
+                </case>
+                <case regex="urn:deleteTask">
+                    <activecollab.deleteTask>
+                        <projectId>{$ctx:projectId}</projectId>
+                        <taskId>{$ctx:taskId}</taskId>
+                    </activecollab.deleteTask>
+                </case>
+                <case regex="urn:getCompletedTasks">
+                    <activecollab.getCompletedTasks>
+                        <projectId>{$ctx:projectId}</projectId>
+                    </activecollab.getCompletedTasks>
+                </case>
+                <case regex="urn:getTask">
+                    <activecollab.getTask>
+                        <projectId>{$ctx:projectId}</projectId>
+                        <taskId>{$ctx:taskId}</taskId>
+                    </activecollab.getTask>
+                </case>
+                <case regex="urn:listTasks">
+                    <activecollab.listTasks>
+                        <projectId>{$ctx:projectId}</projectId>
+                    </activecollab.listTasks>
+                </case>
+                <case regex="urn:promoteSubTaskToTask">
+                    <activecollab.promoteSubTaskToTask>
+                        <projectId>{$ctx:projectId}</projectId>
+                        <taskId>{$ctx:taskId}</taskId>
+                        <subTaskId>{$ctx:subTaskId}</subTaskId>
+                    </activecollab.promoteSubTaskToTask>
+                </case>
+                <case regex="urn:renameTask">
+                    <activecollab.renameTask>
+                        <projectId>{$ctx:projectId}</projectId>
+                        <taskId>{$ctx:taskId}</taskId>
+                        <name>{$ctx:name}</name>
+                    </activecollab.renameTask>
+                </case>
+                <case regex="urn:reopenTask">
+                    <activecollab.reopenTask>
+                        <taskId>{$ctx:taskId}</taskId>
+                    </activecollab.reopenTask>
+                </case>
+                <case regex="urn:deleteUser">
+                    <activecollab.deleteUser>
+                        <userId>{$ctx:userId}</userId>
+                    </activecollab.deleteUser>
+                </case>
+                <case regex="urn:reactivateUser">
+                    <activecollab.reactivateUser>
+                        <userId>{$ctx:userId}</userId>
+                    </activecollab.reactivateUser>
+                </case>
+            </switch>
+            <respond/>
+        </inSequence>
+    </target>
+    <description/>
+</proxy>

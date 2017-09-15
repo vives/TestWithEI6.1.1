@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ ~  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~  WSO2 Inc. licenses this file to you under the Apache License,
+ ~  Version 2.0 (the "License"); you may not use this file except
+ ~  in compliance with the License.
+ ~  You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~  Unless required by applicable law or agreed to in writing,
+ ~  software distributed under the License is distributed on an
+ ~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~  KIND, either express or implied.  See the License for the
+ ~  specific language governing permissions and limitations
+ ~  under the License.
+-->
+<template name="createProject" xmlns="http://ws.apache.org/ns/synapse">
+    <parameter name="name" description="The name of the project."/>
+    <parameter name="companyId" description="The ID of the company."/>
+    <parameter name="leaderId" description="The ID of the leader."/>
+    <parameter name="categoryId" description="The ID of the project category."/>
+    <parameter name="members" description="The list of ID of the project members."/>
+    <sequence>
+        <property name="uri.var.name" expression="$func:name"/>
+        <property name="uri.var.companyId" expression="$func:companyId"/>
+        <property name="uri.var.leaderId" expression="$func:leaderId"/>
+        <property name="uri.var.categoryId" expression="$func:categoryId"/>
+        <property name="uri.var.members" expression="$func:members"/>
+        <payloadFactory media-type="json">
+            <format>
+                {
+                "name":"$1"
+                }
+            </format>
+            <args>
+                <arg expression="$ctx:uri.var.name"/>
+            </args>
+        </payloadFactory>
+        <script language="js">
+            <![CDATA[
+                var companyId = mc.getProperty('uri.var.companyId');
+                var leaderId = mc.getProperty('uri.var.leaderId');
+                var categoryId = mc.getProperty('uri.var.categoryId');
+                var members = mc.getProperty('uri.var.members');
+                var payload = mc.getPayloadJSON();
+
+                if (leaderId != null && leaderId != "") {
+                    payload.leader_id=leaderId;
+                }
+                if (companyId != null && companyId != "") {
+                    payload.company_id=companyId;
+                }
+                if (categoryId != null && categoryId != "") {
+                    payload.category_id=categoryId;
+                }
+                if (members != null && members != "" && members!="[]") {
+                    payload.members=eval( "(" + members + ")" );
+                }
+                mc.setPayloadJSON(payload);
+            ]]>
+        </script>
+        <property name="messageType" value="application/json" scope="axis2"/>
+        <header name="X-Angie-AuthApiToken" expression="$ctx:uri.var.activeCollabToken" scope="transport"/>
+        <filter source="$ctx:activecollabBlocking" regex="true">
+            <then>
+                <call blocking="true">
+                    <endpoint>
+                        <http method="POST" uri-template="{uri.var.apiUrl}/api/{uri.var.apiVersion}/projects"/>
+                    </endpoint>
+                </call>
+            </then>
+            <else>
+                <call>
+                    <endpoint>
+                        <http method="POST" uri-template="{uri.var.apiUrl}/api/{uri.var.apiVersion}/projects"/>
+                    </endpoint>
+                </call>
+            </else>
+        </filter>
+    </sequence>
+</template>
